@@ -1,3 +1,5 @@
+@use "../abstracts/mixins" as *;
+
 .btn {
   cursor: pointer;
   border: none;
@@ -8,4 +10,24 @@
   padding: 1rem;
   font-size: 2rem;
   font-weight: 900;
+
+  &-gamemode {
+    display: flex;
+    align-items: center;
+    min-width: 260px;
+    gap: 1rem;
+
+    > svg {
+      @include fixed-square(4rem);
+    }
+
+    &-text {
+      text-align: start;
+
+      &-play {
+        font-weight: 400;
+        font-size: 1rem;
+      }
+    }
+  }
 }
