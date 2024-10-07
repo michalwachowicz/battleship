@@ -1,0 +1,7 @@
+@mixin fixed-square($size) {
+  min-width: $size;
+  width: $size;
+
+  min-height: $size;
+  height: $size;
+}
