@@ -1,0 +1,67 @@
+/*
+  Use a more intuitive box-sizing model
+*/
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/*
+  Remove default margin and padding
+*/
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+/*
+  Set media elements defaults to block
+*/
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/*
+  Add word wrapping for long words to avoid overflowing
+*/
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/*
+  Correct the inability to style clickable types in iOS and Safari
+*/
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  appearance: button;
+  -webkit-appearance: button;
+}
+
+/*
+  Remove the inner border and padding in Firefox
+*/
+
+::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
