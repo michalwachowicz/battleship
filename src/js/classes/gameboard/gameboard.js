@@ -29,7 +29,7 @@ export default class Gameboard {
     );
   }
 
-  checkPlacement({ length }, x, y, horizontal, callback) {
+  checkPlacement({ length, horizontal }, x, y, callback) {
     if (horizontal) {
       if (y + length > this.size) return false;
 
@@ -47,17 +47,17 @@ export default class Gameboard {
     return true;
   }
 
-  isValidPlacement(ship, x, y, horizontal) {
-    return this.checkPlacement(ship, x, y, horizontal, (nx, ny) =>
+  isValidPlacement(ship, x, y) {
+    return this.checkPlacement(ship, x, y, (nx, ny) =>
       this.isAdjacentToShip(nx, ny)
     );
   }
 
-  placeShip(ship, x, y, horizontal) {
-    if (!this.isValidPlacement(ship, x, y, horizontal)) return false;
+  placeShip(ship, x, y) {
+    if (!this.isValidPlacement(ship, x, y)) return false;
 
     this.ships.push(ship);
-    this.checkPlacement(ship, x, y, horizontal, (nx, ny) => {
+    this.checkPlacement(ship, x, y, (nx, ny) => {
       this.grid[nx][ny] = { ship, attacked: false };
       return false;
     });

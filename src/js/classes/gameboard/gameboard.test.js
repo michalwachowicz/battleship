@@ -10,7 +10,7 @@ describe("Gameboard", () => {
 
   beforeEach(() => {
     gameboard = new Gameboard();
-    ship = new Ship(5);
+    ship = new Ship("carrier", 5);
   });
 
   it("creates a gameboard with 10x10 grid", () => {
@@ -26,7 +26,7 @@ describe("Gameboard", () => {
     ));
 
   it("places a ship horizontally", () => {
-    expect(gameboard.placeShip(ship, shipX, shipY, true)).toBe(true);
+    expect(gameboard.placeShip(ship, shipX, shipY)).toBe(true);
     expect(gameboard.ships).toContain(ship);
 
     for (let i = shipY; i < shipY + ship.length; i += 1) {
@@ -35,7 +35,9 @@ describe("Gameboard", () => {
   });
 
   it("places a ship vertically", () => {
-    expect(gameboard.placeShip(ship, shipX, shipY, false)).toBe(true);
+    ship.horizontal = false;
+
+    expect(gameboard.placeShip(ship, shipX, shipY)).toBe(true);
     expect(gameboard.ships).toContain(ship);
 
     for (let i = shipX; i < shipX + ship.length; i += 1) {
@@ -44,19 +46,25 @@ describe("Gameboard", () => {
   });
 
   it("does not place a ship in invalid space", () => {
-    expect(gameboard.placeShip(ship, shipX, shipY + 5, true)).toBe(false);
-    expect(gameboard.placeShip(ship, shipX + 5, shipY, false)).toBe(false);
+    expect(gameboard.placeShip(ship, shipX, shipY + 5)).toBe(false);
+    expect(
+      gameboard.placeShip(new Ship("carrier", 5, false), shipX + 5, shipY)
+    ).toBe(false);
   });
 
   it("does not place a ship on top or near other ship", () => {
-    expect(gameboard.placeShip(ship, shipX, shipY, true)).toBe(true);
+    expect(gameboard.placeShip(ship, shipX, shipY)).toBe(true);
 
-    expect(gameboard.placeShip(new Ship(5), 0, 0, false)).toBe(false);
-    expect(gameboard.placeShip(new Ship(5), shipX + 1, shipY, true)).toBe(
+    expect(gameboard.placeShip(new Ship("carrier", 5, false), 0, 0)).toBe(
+      false
+    );
+    expect(gameboard.placeShip(new Ship("carrier", 5), shipX + 1, shipY)).toBe(
       false
     );
 
-    expect(gameboard.placeShip(new Ship(5), shipX + 2, shipY, true)).toBe(true);
+    expect(gameboard.placeShip(new Ship("carrier", 5), shipX + 2, shipY)).toBe(
+      true
+    );
   });
 
   it("receives attack on empty spot", () => {
@@ -68,7 +76,7 @@ describe("Gameboard", () => {
   });
 
   it("receives attack on ship", () => {
-    expect(gameboard.placeShip(ship, shipX, shipY, true)).toBe(true);
+    expect(gameboard.placeShip(ship, shipX, shipY)).toBe(true);
     expect(gameboard.grid[shipX][shipY]).toEqual({ ship, attacked: false });
     expect(ship.hits).toBe(0);
 
@@ -90,8 +98,10 @@ describe("Gameboard", () => {
   it("checks if all ships are sunk", () => {
     expect(gameboard.allShipsSunk()).toBe(false);
 
-    expect(gameboard.placeShip(ship, shipX, shipY, true)).toBe(true);
-    expect(gameboard.placeShip(new Ship(3), shipX + 2, shipY, true)).toBe(true);
+    expect(gameboard.placeShip(ship, shipX, shipY)).toBe(true);
+    expect(
+      gameboard.placeShip(new Ship("submarine", 3), shipX + 2, shipY)
+    ).toBe(true);
 
     for (let y = shipY; y < shipY + ship.length; y += 1) {
       expect(gameboard.receiveAttack(shipX, y)).toBe(true);
