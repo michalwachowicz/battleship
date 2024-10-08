@@ -7,7 +7,7 @@
   </head>
   <body>
     <div class="container">
-      <div class="main">
+      <div class="main hidden">
         <h1>Battleship</h1>
         <div class="gamemode-btns"></div>
       </div>
@@ -17,6 +17,20 @@
           Hide the screen from your friend and place your ships
         </p>
         <button type="button" class="btn btn-wide">I'M READY!</button>
+      </div>
+
+      <div class="ship-placement">
+        <div class="ship-placement-container">
+          <div class="grid ship-placement-grid"></div>
+          <div class="ship-placement-ships"></div>
+        </div>
+
+        <div class="ship-placement-btns">
+          <button type="button" class="btn btn-wide btn-randomize">
+            RANDOMIZE
+          </button>
+          <button type="button" class="btn btn-wide btn-play">PLAY</button>
+        </div>
       </div>
     </div>
   </body>
