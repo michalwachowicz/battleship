@@ -65,6 +65,28 @@ export default class Gameboard {
     return true;
   }
 
+  rotateShip(startX, startY) {
+    const { ship } = this.grid[startX][startY];
+    if (!ship) return false;
+
+    this.checkPlacement(ship, startX, startY, (x, y) => {
+      this.grid[x][y] = { ...this.grid[x][y], ship: null };
+      return false;
+    });
+
+    ship.horizontal = !ship.horizontal;
+
+    if (!this.isValidPlacement(ship, startX, startY)) {
+      ship.horizontal = !ship.horizontal;
+      this.placeShip(ship, startX, startY);
+
+      return false;
+    }
+
+    this.placeShip(ship, startX, startY);
+    return true;
+  }
+
   receiveAttack(x, y) {
     if (x < 0 || x >= this.size || y < 0 || y >= this.size) return false;
     const { ship, attacked } = this.grid[x][y];

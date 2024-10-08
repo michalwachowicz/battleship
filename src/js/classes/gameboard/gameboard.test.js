@@ -67,6 +67,37 @@ describe("Gameboard", () => {
     );
   });
 
+  it("rotates ship on empty space", () => {
+    expect(gameboard.placeShip(ship, shipX, shipY)).toBe(true);
+    expect(gameboard.grid[shipX][shipY + 1]).toEqual({ ship, attacked: false });
+    expect(gameboard.grid[shipX + 1][shipY]).toEqual({
+      ship: null,
+      attacked: false,
+    });
+    expect(ship.horizontal).toBe(true);
+
+    expect(gameboard.rotateShip(shipX, shipY)).toBe(true);
+    expect(gameboard.grid[shipX + 1][shipY]).toEqual({ ship, attacked: false });
+    expect(gameboard.grid[shipX][shipY + 1]).toEqual({
+      ship: null,
+      attacked: false,
+    });
+    expect(ship.horizontal).toBe(false);
+  });
+
+  it("does not rotate ship on empty spot", () => {
+    expect(gameboard.rotateShip(0, 0)).toBe(false);
+  });
+
+  it("does not rotate ship if invalid", () => {
+    expect(gameboard.placeShip(ship, shipX, shipY)).toBe(true);
+    expect(gameboard.placeShip(new Ship("carrier", 5), shipX + 3, shipY)).toBe(
+      true
+    );
+
+    expect(gameboard.rotateShip(shipX, shipY)).toBe(false);
+  });
+
   it("receives attack on empty spot", () => {
     expect(gameboard.grid[0][0]).toEqual({ ship: null, attacked: false });
 
