@@ -7,7 +7,7 @@
   </head>
   <body>
     <div class="container">
-      <div class="main hidden">
+      <div class="main">
         <h1>Battleship</h1>
         <div class="gamemode-btns"></div>
       </div>
@@ -19,7 +19,20 @@
         <button type="button" class="btn btn-wide">I'M READY!</button>
       </div>
 
-      <div class="ship-placement">
+      <div class="message message-pass-screen hidden">
+        <p class="message-text">
+          Pass the screen to your friend and don't look
+        </p>
+        <button type="button" class="btn btn-wide">DONE!</button>
+      </div>
+
+      <div class="message message-gameover hidden">
+        <p class="message-text">Game over!</p>
+        <p class="message-text message-text-winner">Player 1 won the game</p>
+        <button type="button" class="btn btn-wide">NEW GAME!</button>
+      </div>
+
+      <div class="ship-placement hidden">
         <div class="ship-placement-container">
           <div class="grid ship-placement-grid"></div>
           <div class="ship-placement-ships"></div>
