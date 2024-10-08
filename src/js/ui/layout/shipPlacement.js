@@ -8,6 +8,7 @@ export default class ShipPlacement {
 
     this.gameboard = null;
     this.draggedShip = null;
+    this.draggedShipElement = null;
 
     this.setupEventListeners();
   }
@@ -77,10 +78,12 @@ export default class ShipPlacement {
   }
 
   handleDragStart(event) {
-    const { name, length, horizontal } = event.target.closest(".ship").dataset;
+    const shipElement = event.target.closest(".ship");
+    const { name, length, horizontal } = shipElement.dataset;
     const ship = new Ship(name, parseInt(length, 10), horizontal);
 
     this.draggedShip = ship;
+    this.draggedShipElement = shipElement;
   }
 
   handleDragOver(event) {
@@ -109,7 +112,9 @@ export default class ShipPlacement {
     }
 
     this.resetGridHighlight();
+
     this.draggedShip = null;
+    this.draggedShipElement = null;
   }
 
   highlightCells({ length, horizontal }, x, y, isValid) {
@@ -148,6 +153,7 @@ export default class ShipPlacement {
     placedShip.innerHTML = ships.getModel(ship.name);
 
     this.gridContainer.appendChild(placedShip);
+    this.draggedShipElement.remove();
   }
 
   // eslint-disable-next-line class-methods-use-this
