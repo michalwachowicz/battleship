@@ -6,7 +6,7 @@ describe("Ship", () => {
   let ship;
 
   beforeEach(() => {
-    ship = new Ship(LENGTH);
+    ship = new Ship("carrier", LENGTH);
   });
 
   it("creates a ship with proper length", () =>
