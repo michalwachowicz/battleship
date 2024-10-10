@@ -75,6 +75,10 @@ export default class ShipPlacement {
       this.resetGridHighlight.bind(this)
     );
     this.gridContainer.addEventListener("drop", this.handleDrop.bind(this));
+    this.gridContainer.addEventListener(
+      "click",
+      this.handleShipRotation.bind(this)
+    );
   }
 
   handleDragStart(event) {
@@ -117,6 +121,27 @@ export default class ShipPlacement {
     this.draggedShipElement = null;
   }
 
+  handleShipRotation(e) {
+    const shipElement = e.target.closest(".placed-ship");
+    if (!shipElement) return;
+
+    const { gridArea } = shipElement.style;
+    const [startX, startY] = gridArea.split(" / ");
+    const x = parseInt(startX - 1, 10);
+    const y = parseInt(startY - 1, 10);
+
+    if (!this.gameboard.rotateShip(x, y)) {
+      // Show animation
+      return;
+    }
+
+    const horizontal = !(shipElement.dataset.horizontal === "true");
+    shipElement.dataset.horizontal = horizontal;
+
+    if (horizontal) shipElement.classList.remove("placed-ship-vertical");
+    else shipElement.classList.add("placed-ship-vertical");
+  }
+
   highlightCells({ length, horizontal }, x, y, isValid) {
     for (let i = 0; i < length; i += 1) {
       const targetX = horizontal ? x : x + i;
@@ -149,6 +174,8 @@ export default class ShipPlacement {
     const placedShip = document.createElement("div");
 
     placedShip.classList.add("placed-ship");
+    placedShip.dataset.length = ship.length;
+    placedShip.dataset.horizontal = ship.horizontal;
     placedShip.style.gridArea = this.calculateGridArea(ship, x, y);
     placedShip.innerHTML = ships.getModel(ship.name);
 
@@ -157,11 +184,11 @@ export default class ShipPlacement {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  calculateGridArea({ length, horizontal }, x, y) {
+  calculateGridArea({ length }, x, y) {
     const startRow = x + 1;
     const startCol = y + 1;
-    const endRow = horizontal ? startRow : startCol + length - 1;
-    const endCol = horizontal ? startCol + length - 1 : startCol;
+    const endRow = startRow;
+    const endCol = startCol + length - 1;
 
     return `${startRow} / ${startCol} / ${endRow + 1} / ${endCol + 1}`;
   }
