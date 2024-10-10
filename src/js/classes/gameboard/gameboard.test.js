@@ -197,4 +197,18 @@ describe("Gameboard", () => {
       ).toBeDefined();
     });
   });
+
+  it("clears grid properly", () => {
+    expect(gameboard.placeShip(ship, shipX, shipY)).toBe(true);
+    expect(gameboard.ships).toHaveLength(1);
+
+    gameboard.clear();
+
+    expect(gameboard.ships).toHaveLength(0);
+    for (let x = 0; x < gameboard.size; x += 1) {
+      for (let y = 0; y < gameboard.size; y += 1) {
+        expect(gameboard.grid[x][y]).toEqual({ ship: null, attacked: false });
+      }
+    }
+  });
 });

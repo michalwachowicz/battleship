@@ -132,4 +132,14 @@ export default class Gameboard {
       } while (!this.placeShip(ship, x, y));
     }
   }
+
+  clear() {
+    this.ships = [];
+
+    for (let x = 0; x < this.size; x += 1) {
+      for (let y = 0; y < this.size; y += 1) {
+        this.grid[x][y] = { ship: null, attacked: false };
+      }
+    }
+  }
 }
