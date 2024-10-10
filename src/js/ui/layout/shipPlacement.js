@@ -10,6 +10,10 @@ export default class ShipPlacement {
     this.draggedShip = null;
     this.draggedShipElement = null;
 
+    this.startX = -1;
+    this.startY = -1;
+    this.isDragging = false;
+
     this.setupEventListeners();
   }
 
@@ -56,9 +60,8 @@ export default class ShipPlacement {
       shipElement.dataset.length = length;
       shipElement.dataset.horizontal = horizontal;
 
-      shipElement.addEventListener(
-        "dragstart",
-        this.handleDragStart.bind(this)
+      shipElement.addEventListener("dragstart", (event) =>
+        this.handleDragStart(event, ".ship")
       );
 
       this.shipContainer.appendChild(shipElement);
@@ -75,19 +78,56 @@ export default class ShipPlacement {
       this.resetGridHighlight.bind(this)
     );
     this.gridContainer.addEventListener("drop", this.handleDrop.bind(this));
-    this.gridContainer.addEventListener(
-      "click",
-      this.handleShipRotation.bind(this)
-    );
   }
 
-  handleDragStart(event) {
-    const shipElement = event.target.closest(".ship");
+  handleMouseDown(event) {
+    this.isDragging = false;
+    this.startX = event.clientX;
+    this.startY = event.clientY;
+  }
+
+  handleMouseMove(event) {
+    const x = this.startX - event.clientX;
+    const y = this.startY - event.clientY;
+
+    if (Math.abs(x) > 5 || Math.abs(y) > 5) this.isDragging = true;
+  }
+
+  handleMouseUp(shipElement) {
+    if (!this.isDragging) this.rotateShip(shipElement);
+
+    this.isDragging = false;
+  }
+
+  handleDragStart(event, shipClass) {
+    const shipElement = event.target.closest(shipClass);
     const { name, length, horizontal } = shipElement.dataset;
-    const ship = new Ship(name, parseInt(length, 10), horizontal);
+    const ship = new Ship(name, parseInt(length, 10), horizontal === "true");
 
     this.draggedShip = ship;
     this.draggedShipElement = shipElement;
+
+    if (!ship.horizontal) {
+      const svg = shipElement.querySelector("svg").cloneNode(true);
+      const dragImage = document.createElement("div");
+
+      dragImage.style.width = `${shipElement.clientWidth}px`;
+      dragImage.style.height = `${shipElement.cientHeight}px`;
+      dragImage.style.position = "absolute";
+      dragImage.style.top = "-9999px";
+
+      svg.style.transform = "rotate(90deg)";
+      svg.style.transformOrigin = "top left";
+
+      dragImage.appendChild(svg);
+      document.body.appendChild(dragImage);
+
+      event.dataTransfer.setDragImage(dragImage, 0, 0);
+
+      event.target.addEventListener("dragend", () => {
+        document.body.removeChild(dragImage); // Remove the temporary drag image from DOM
+      });
+    }
   }
 
   handleDragOver(event) {
@@ -121,8 +161,8 @@ export default class ShipPlacement {
     this.draggedShipElement = null;
   }
 
-  handleShipRotation(e) {
-    const shipElement = e.target.closest(".placed-ship");
+  rotateShip(ship) {
+    const shipElement = ship;
     if (!shipElement) return;
 
     const { gridArea } = shipElement.style;
@@ -174,10 +214,23 @@ export default class ShipPlacement {
     const placedShip = document.createElement("div");
 
     placedShip.classList.add("placed-ship");
+    placedShip.dataset.name = ship.name;
     placedShip.dataset.length = ship.length;
     placedShip.dataset.horizontal = ship.horizontal;
     placedShip.style.gridArea = this.calculateGridArea(ship, x, y);
     placedShip.innerHTML = ships.getModel(ship.name);
+    placedShip.setAttribute("draggable", true);
+
+    if (!ship.horizontal) placedShip.classList.add("placed-ship-vertical");
+
+    placedShip.addEventListener("mousedown", this.handleMouseDown.bind(this));
+    placedShip.addEventListener("mousemove", this.handleMouseDown.bind(this));
+    placedShip.addEventListener("mouseup", () =>
+      this.handleMouseUp(placedShip)
+    );
+    placedShip.addEventListener("dragstart", (event) =>
+      this.handleDragStart(event, ".placed-ship")
+    );
 
     this.gridContainer.appendChild(placedShip);
     this.draggedShipElement.remove();
