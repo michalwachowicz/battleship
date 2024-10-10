@@ -1,10 +1,21 @@
 import Ship from "../../classes/ship/ship";
+import cleanContainer from "../../utils/containerCleaner";
 import ships from "../models/ships";
 
 export default class ShipPlacement {
-  constructor(gridSelector, shipSelector) {
+  constructor(
+    shipsArr,
+    gridSelector,
+    shipSelector,
+    randomizeBtnSelector,
+    playBtnSelector
+  ) {
+    this.shipsArr = shipsArr || [];
+
     this.gridContainer = document.querySelector(gridSelector);
     this.shipContainer = document.querySelector(shipSelector);
+    this.randomizeBtn = document.querySelector(randomizeBtnSelector);
+    this.playBtn = document.querySelector(playBtnSelector);
 
     this.gameboard = null;
     this.draggedShip = null;
@@ -15,20 +26,22 @@ export default class ShipPlacement {
     this.isDragging = false;
 
     this.setupEventListeners();
+    this.randomizeBtn.addEventListener(
+      "click",
+      this.handleRandomize.bind(this)
+    );
   }
 
-  init(gameboard, shipArr) {
+  init(gameboard) {
     this.gameboard = gameboard;
 
     this.clearGrid();
     this.renderGrid();
-    this.renderDraggableShips(shipArr);
+    this.renderDraggableShips();
   }
 
   clearGrid() {
-    while (this.gridContainer.firstChild) {
-      this.gridContainer.removeChild(this.gridContainer.firstChild);
-    }
+    cleanContainer(this.gridContainer);
   }
 
   renderGrid() {
@@ -48,8 +61,10 @@ export default class ShipPlacement {
     }
   }
 
-  renderDraggableShips(shipsArr) {
-    shipsArr.forEach(({ name, length, horizontal }) => {
+  renderDraggableShips() {
+    this.clearShips();
+
+    this.shipsArr.forEach(({ name, length, horizontal }) => {
       const shipElement = document.createElement("div");
 
       shipElement.className = "ship";
@@ -66,6 +81,10 @@ export default class ShipPlacement {
 
       this.shipContainer.appendChild(shipElement);
     });
+  }
+
+  clearShips() {
+    cleanContainer(this.shipContainer);
   }
 
   setupEventListeners() {
@@ -161,6 +180,32 @@ export default class ShipPlacement {
     this.draggedShipElement = null;
   }
 
+  handleRandomize() {
+    this.gameboard.clear();
+    this.gameboard.randomize(this.shipsArr);
+
+    this.clearGrid();
+    this.renderGrid();
+    this.clearShips();
+
+    this.renderShipsOnGrid();
+  }
+
+  renderShipsOnGrid() {
+    const renderedShips = [];
+
+    for (let x = 0; x < this.gameboard.size; x += 1) {
+      for (let y = 0; y < this.gameboard.size; y += 1) {
+        const { ship } = this.gameboard.grid[x][y];
+
+        if (ship && !renderedShips.find((shipName) => shipName === ship.name)) {
+          this.renderPlacedShip(ship, x, y);
+          renderedShips.push(ship.name);
+        }
+      }
+    }
+  }
+
   rotateShip(ship) {
     const shipElement = ship;
     if (!shipElement) return;
@@ -216,10 +261,7 @@ export default class ShipPlacement {
     }
   }
 
-  placeShipOnGrid(ship, x, y) {
-    this.removeMovedShip();
-    this.gameboard.placeShip(ship, x, y);
-
+  renderPlacedShip(ship, x, y) {
     const placedShip = document.createElement("div");
 
     placedShip.classList.add("placed-ship");
@@ -242,6 +284,12 @@ export default class ShipPlacement {
     );
 
     this.gridContainer.appendChild(placedShip);
+  }
+
+  placeShipOnGrid(ship, x, y) {
+    this.removeMovedShip();
+    this.gameboard.placeShip(ship, x, y);
+    this.renderDraggableShips(ship, x, y);
     this.draggedShipElement.remove();
   }
 
