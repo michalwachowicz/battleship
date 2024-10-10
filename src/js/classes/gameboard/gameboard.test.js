@@ -146,4 +146,29 @@ describe("Gameboard", () => {
 
     expect(gameboard.allShipsSunk()).toBe(true);
   });
+
+  it("removes a ship from board", () => {
+    expect(gameboard.placeShip(ship, shipX, shipY)).toBe(true);
+    expect(gameboard.ships).toHaveLength(1);
+
+    for (let i = shipY; i < shipY + ship.length; i += 1) {
+      expect(gameboard.grid[shipX][i]).toEqual({ ship, attacked: false });
+    }
+
+    expect(gameboard.placeShip(new Ship("test", 4), shipX + 2, shipY)).toBe(
+      true
+    );
+    expect(gameboard.ships).toHaveLength(2);
+
+    expect(gameboard.removeShip(shipX, shipY)).toBe(true);
+    expect(gameboard.ships).toHaveLength(1);
+
+    for (let i = shipY; i < shipY + ship.length; i += 1) {
+      expect(gameboard.grid[shipX][i]).toEqual({ ship: null, attacked: false });
+    }
+  });
+
+  it("does not remove non existing ship", () => {
+    expect(gameboard.removeShip(shipX, shipY)).toBe(false);
+  });
 });

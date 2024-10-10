@@ -65,6 +65,19 @@ export default class Gameboard {
     return true;
   }
 
+  removeShip(startX, startY) {
+    const { ship } = this.grid[startX][startY];
+    if (!ship) return false;
+
+    this.ships = this.ships.filter((s) => s !== ship);
+    this.checkPlacement(ship, startX, startY, (x, y) => {
+      this.grid[x][y] = { ...this.grid[x][y], ship: null };
+      return false;
+    });
+
+    return true;
+  }
+
   rotateShip(startX, startY) {
     const { ship } = this.grid[startX][startY];
     if (!ship) return false;
