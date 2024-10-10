@@ -115,4 +115,21 @@ export default class Gameboard {
     if (!this.ships || this.ships.length === 0) return false;
     return this.ships.every((ship) => ship.isSunk());
   }
+
+  randomize(ships) {
+    const shipsCopy = [...ships];
+
+    while (shipsCopy.length > 0) {
+      const ship = shipsCopy.pop();
+      ship.horizontal = Math.random() < 0.5;
+
+      let x;
+      let y;
+
+      do {
+        x = Math.floor(Math.random() * this.size);
+        y = Math.floor(Math.random() * this.size);
+      } while (!this.placeShip(ship, x, y));
+    }
+  }
 }

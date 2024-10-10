@@ -171,4 +171,30 @@ describe("Gameboard", () => {
   it("does not remove non existing ship", () => {
     expect(gameboard.removeShip(shipX, shipY)).toBe(false);
   });
+
+  it("randomizes ship placement properly", () => {
+    expect(gameboard.ships).toHaveLength(0);
+
+    const shipArr = [
+      new Ship("carrier", 5),
+      new Ship("battleship", 4),
+      new Ship("destroyer", 3),
+      new Ship("submarine", 3),
+      new Ship("small", 2),
+    ];
+
+    gameboard.randomize(shipArr);
+
+    expect(gameboard.ships).toHaveLength(shipArr.length);
+    expect(gameboard.ships).not.toEqual(shipArr);
+    expect(gameboard.ships.find((s) => !s.horizontal)).toBeDefined();
+
+    const flatGrid = gameboard.grid.flat();
+
+    shipArr.forEach((s) => {
+      expect(
+        flatGrid.find((cell) => cell.ship && cell.ship.name === s.name)
+      ).toBeDefined();
+    });
+  });
 });
