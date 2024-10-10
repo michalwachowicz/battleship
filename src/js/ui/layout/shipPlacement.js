@@ -208,7 +208,16 @@ export default class ShipPlacement {
     });
   }
 
+  removeMovedShip() {
+    const { gridArea } = this.draggedShipElement.style;
+    if (gridArea) {
+      const [x, y] = gridArea.split(" / ");
+      this.gameboard.removeShip(x - 1, y - 1);
+    }
+  }
+
   placeShipOnGrid(ship, x, y) {
+    this.removeMovedShip();
     this.gameboard.placeShip(ship, x, y);
 
     const placedShip = document.createElement("div");
