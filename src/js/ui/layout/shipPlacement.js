@@ -34,7 +34,7 @@ export default class ShipPlacement {
     );
   }
 
-  init(gameboard) {
+  init(gameboard, onPlay) {
     this.gameboard = gameboard;
     this.placedShips = new Set();
 
@@ -42,6 +42,7 @@ export default class ShipPlacement {
     this.renderGrid();
     this.renderDraggableShips();
 
+    this.playBtn.onclick = onPlay;
     this.showPlayButton();
   }
 
