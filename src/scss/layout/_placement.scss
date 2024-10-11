@@ -1,0 +1,29 @@
+.ship-placement {
+  padding: 7rem 0;
+
+  &-btns,
+  &-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &-container {
+    gap: 4.5rem;
+  }
+
+  &-btns {
+    margin-top: 5rem;
+    gap: 5rem;
+
+    > .btn {
+      width: 17.5rem;
+    }
+  }
+
+  &-ships {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+  }
+}
