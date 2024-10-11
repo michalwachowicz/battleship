@@ -11,6 +11,7 @@ export default class ShipPlacement {
     playBtnSelector
   ) {
     this.shipsArr = shipsArr || [];
+    this.placedShips = new Set();
 
     this.gridContainer = document.querySelector(gridSelector);
     this.shipContainer = document.querySelector(shipSelector);
@@ -34,10 +35,13 @@ export default class ShipPlacement {
 
   init(gameboard) {
     this.gameboard = gameboard;
+    this.placedShips = new Set();
 
     this.clearGrid();
     this.renderGrid();
     this.renderDraggableShips();
+
+    this.showPlayButton();
   }
 
   clearGrid() {
@@ -300,6 +304,8 @@ export default class ShipPlacement {
     );
 
     this.gridContainer.appendChild(placedShip);
+    this.placedShips.add(ship.name);
+    this.showPlayButton();
   }
 
   placeShipOnGrid(ship, x, y) {
@@ -307,6 +313,16 @@ export default class ShipPlacement {
     this.gameboard.placeShip(ship, x, y);
     this.renderPlacedShip(ship, x, y);
     this.draggedShipElement.remove();
+  }
+
+  showPlayButton() {
+    if (!this.placedShips || !this.shipsArr) return;
+
+    if (this.placedShips.size === this.shipsArr.length) {
+      this.playBtn.classList.remove("hidden");
+    } else {
+      this.playBtn.classList.add("hidden");
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this
