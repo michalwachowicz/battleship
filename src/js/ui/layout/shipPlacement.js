@@ -148,10 +148,7 @@ export default class ShipPlacement {
       document.body.appendChild(dragImage);
 
       event.dataTransfer.setDragImage(dragImage, 0, 0);
-
-      event.target.addEventListener("dragend", () => {
-        document.body.removeChild(dragImage); // Remove the temporary drag image from DOM
-      });
+      event.target.addEventListener("dragend", () => dragImage.remove());
     }
   }
 
