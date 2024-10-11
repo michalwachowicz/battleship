@@ -1,5 +1,6 @@
 import Ship from "../../classes/ship/ship";
 import cleanContainer from "../../utils/containerCleaner";
+import isDefinedNumber from "../../utils/numbersUtil";
 import ships from "../models/ships";
 
 export default class ShipPlacement {
@@ -163,6 +164,8 @@ export default class ShipPlacement {
     const x = parseInt(event.target.dataset.x, 10);
     const y = parseInt(event.target.dataset.y, 10);
 
+    if (!isDefinedNumber(x) || !isDefinedNumber(y)) return;
+
     const valid = this.gameboard.isValidPlacement(this.draggedShip, x, y);
 
     this.highlightCells(this.draggedShip, x, y, valid);
@@ -174,7 +177,11 @@ export default class ShipPlacement {
     const x = parseInt(event.target.dataset.x, 10);
     const y = parseInt(event.target.dataset.y, 10);
 
-    if (this.gameboard.isValidPlacement(this.draggedShip, x, y)) {
+    if (
+      isDefinedNumber(x) &&
+      isDefinedNumber(y) &&
+      this.gameboard.isValidPlacement(this.draggedShip, x, y)
+    ) {
       this.placeShipOnGrid(this.draggedShip, x, y);
     }
 
