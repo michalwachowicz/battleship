@@ -1,0 +1,25 @@
+.grid {
+  display: grid;
+  position: relative;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  gap: 2px;
+  overflow: visible;
+  max-width: 30rem;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border: 2px solid #1972c2;
+  background-color: #1972c2;
+
+  &-item {
+    background-color: #003366;
+
+    &-valid {
+      background-color: #16a34a;
+    }
+
+    &-invalid {
+      background-color: #dc2626;
+    }
+  }
+}
