@@ -112,8 +112,8 @@ export default class ShipPlacement {
     if (Math.abs(x) > 5 || Math.abs(y) > 5) this.isDragging = true;
   }
 
-  handleMouseUp(shipElement) {
-    if (!this.isDragging) this.rotateShip(shipElement);
+  handleMouseUp(ship, shipElement) {
+    if (!this.isDragging) this.rotateShip(ship, shipElement);
 
     this.isDragging = false;
   }
@@ -206,12 +206,11 @@ export default class ShipPlacement {
     }
   }
 
-  rotateShip(ship) {
-    const shipElement = ship;
+  rotateShip(ship, shipEl) {
+    const shipElement = shipEl;
     if (!shipElement) return;
 
-    const { gridArea } = shipElement.style;
-    const [startX, startY] = gridArea.split(" / ");
+    const [startX, startY] = shipElement.style.gridArea.split(" / ");
     const x = parseInt(startX - 1, 10);
     const y = parseInt(startY - 1, 10);
 
@@ -225,6 +224,8 @@ export default class ShipPlacement {
 
     if (horizontal) shipElement.classList.remove("placed-ship-vertical");
     else shipElement.classList.add("placed-ship-vertical");
+
+    shipElement.style.width = this.calculateShipWidth(y + 1, ship.length);
   }
 
   highlightCells({ length, horizontal }, x, y, isValid) {
@@ -254,11 +255,25 @@ export default class ShipPlacement {
   }
 
   removeMovedShip() {
-    const { gridArea } = this.draggedShipElement.style;
-    if (gridArea) {
-      const [x, y] = gridArea.split(" / ");
+    const { gridColumn, gridRow } = this.draggedShipElement.style;
+    if (gridColumn && gridRow) {
+      const x = gridRow.split(" / ")[0];
+      const y = gridColumn.split(" / ")[0];
+
       this.gameboard.removeShip(x - 1, y - 1);
     }
+  }
+
+  calculateShipWidth(startColumn, length) {
+    const totalColumns = this.gameboard.size;
+    const endColumn = startColumn + length - 1;
+
+    if (endColumn <= totalColumns) return "100%";
+
+    const columnsThatFit = totalColumns - startColumn + 1;
+    const width = Math.round((length / columnsThatFit) * 100 * 100) / 100;
+
+    return `${width}%`;
   }
 
   renderPlacedShip(ship, x, y) {
@@ -269,6 +284,7 @@ export default class ShipPlacement {
     placedShip.dataset.length = ship.length;
     placedShip.dataset.horizontal = ship.horizontal;
     placedShip.style.gridArea = this.calculateGridArea(ship, x, y);
+    placedShip.style.width = this.calculateShipWidth(y + 1, ship.length);
     placedShip.innerHTML = ships.getModel(ship.name);
     placedShip.setAttribute("draggable", true);
 
@@ -277,7 +293,7 @@ export default class ShipPlacement {
     placedShip.addEventListener("mousedown", this.handleMouseDown.bind(this));
     placedShip.addEventListener("mousemove", this.handleMouseDown.bind(this));
     placedShip.addEventListener("mouseup", () =>
-      this.handleMouseUp(placedShip)
+      this.handleMouseUp(ship, placedShip)
     );
     placedShip.addEventListener("dragstart", (event) =>
       this.handleDragStart(event, ".placed-ship")
@@ -289,17 +305,12 @@ export default class ShipPlacement {
   placeShipOnGrid(ship, x, y) {
     this.removeMovedShip();
     this.gameboard.placeShip(ship, x, y);
-    this.renderDraggableShips(ship, x, y);
+    this.renderPlacedShip(ship, x, y);
     this.draggedShipElement.remove();
   }
 
   // eslint-disable-next-line class-methods-use-this
   calculateGridArea({ length }, x, y) {
-    const startRow = x + 1;
-    const startCol = y + 1;
-    const endRow = startRow;
-    const endCol = startCol + length - 1;
-
-    return `${startRow} / ${startCol} / ${endRow + 1} / ${endCol + 1}`;
+    return `${x + 1} / ${y + 1} / span 1 / span ${length}`;
   }
 }
