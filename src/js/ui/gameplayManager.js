@@ -14,10 +14,12 @@ class GameplayManager {
         new Ship("submarine", 3),
         new Ship("small", 2),
       ],
-      ".ship-placement-grid",
-      ".ship-placement-ships",
-      ".btn-randomize",
-      ".btn-play"
+      {
+        grid: ".ship-placement-grid",
+        ships: ".ship-placement-ships",
+        randomizeBtn: ".btn-randomize",
+        playBtn: ".btn-play",
+      }
     );
   }
 
