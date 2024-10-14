@@ -1,3 +1,5 @@
+import { hide, show } from "../../../utils/visibility";
+
 export default class Message {
   constructor(selector, onClick) {
     this.container = document.querySelector(selector);
@@ -7,10 +9,10 @@ export default class Message {
   }
 
   open() {
-    this.container.classList.remove("hidden");
+    show(this.container);
   }
 
   close() {
-    this.container.classList.add("hidden");
+    hide(this.container);
   }
 }

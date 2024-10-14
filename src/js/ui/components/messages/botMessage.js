@@ -1,3 +1,4 @@
+import { hide, show } from "../../../utils/visibility";
 import Ships from "../ships/ships";
 
 export default class BotMessage {
@@ -8,7 +9,7 @@ export default class BotMessage {
   }
 
   open(callback) {
-    this.container.classList.remove("hidden");
+    show(this.container);
     this.ships.render(this.shipsArr);
 
     const placedShips = [...this.shipsArr];
@@ -35,6 +36,6 @@ export default class BotMessage {
   }
 
   close() {
-    this.container.classList.add("hidden");
+    hide(this.container);
   }
 }

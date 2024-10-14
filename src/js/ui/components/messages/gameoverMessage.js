@@ -1,4 +1,4 @@
-import replaceScreen from "../../../utils/screenReplacer";
+import { replaceScreen } from "../../../utils/visibility";
 import Message from "./message";
 
 export default class GameoverMessage extends Message {

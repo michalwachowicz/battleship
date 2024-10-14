@@ -1,5 +1,6 @@
 import Ship from "../../classes/ship/ship";
 import isDefinedNumber from "../../utils/numbersUtil";
+import { hide, show } from "../../utils/visibility";
 import PlacementGrid from "../components/grid/placementGrid";
 import DraggableShips from "../components/ships/draggableShips";
 
@@ -165,9 +166,9 @@ export default class ShipPlacement {
     if (!placedShips || !this.shipsArr) return;
 
     if (placedShips.size === this.shipsArr.length) {
-      this.playBtn.classList.remove("hidden");
+      show(this.playBtn);
     } else {
-      this.playBtn.classList.add("hidden");
+      hide(this.playBtn);
     }
   }
 }
