@@ -143,7 +143,6 @@ export default class Gameboard {
 
     while (shipsCopy.length > 0) {
       const ship = shipsCopy.pop();
-      ship.horizontal = Math.random() < 0.5;
 
       let x;
       let y;
@@ -151,6 +150,8 @@ export default class Gameboard {
       do {
         x = Math.floor(Math.random() * this.size);
         y = Math.floor(Math.random() * this.size);
+
+        ship.horizontal = Math.random() < 0.5;
       } while (!this.placeShip(ship, x, y));
     }
   }
