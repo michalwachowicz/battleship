@@ -6,6 +6,8 @@ export default class Gameplay {
     this.shipsArr = shipsArr;
     this.onGameOver = onGameOver;
 
+    this.wrapper = document.querySelector(".gameplay");
+
     this.player1 = null;
     this.player2 = null;
 
