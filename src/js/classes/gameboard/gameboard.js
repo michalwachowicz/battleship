@@ -111,6 +111,28 @@ export default class Gameboard {
     return true;
   }
 
+  getShipStartCoords(x, y) {
+    const { ship } = this.grid[x][y];
+    if (!ship) return null;
+
+    let [shipX, shipY] = [x, y];
+
+    if (ship.horizontal) {
+      while (shipY > 0 && this.grid[shipX][shipY - 1].ship === ship) {
+        shipY -= 1;
+      }
+    } else {
+      while (shipX > 0 && this.grid[shipX - 1][shipY].ship === ship) {
+        shipX -= 1;
+      }
+    }
+
+    return {
+      x: shipX,
+      y: shipY,
+    };
+  }
+
   allShipsSunk() {
     if (!this.ships || this.ships.length === 0) return false;
     return this.ships.every((ship) => ship.isSunk());

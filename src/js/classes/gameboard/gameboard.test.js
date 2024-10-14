@@ -211,4 +211,26 @@ describe("Gameboard", () => {
       }
     }
   });
+
+  it("returns empty start coords if ship is null", () => {
+    expect(gameboard.getShipStartCoords(shipX, shipY)).toBeNull();
+  });
+
+  it("returns horizontal ship start coords", () => {
+    expect(gameboard.placeShip(ship, shipX, shipY)).toBe(true);
+    expect(gameboard.getShipStartCoords(shipX, shipY + 4)).toEqual({
+      x: shipX,
+      y: shipY,
+    });
+  });
+
+  it("returns vertical ship start coords", () => {
+    ship.horizontal = false;
+
+    expect(gameboard.placeShip(ship, shipX, shipY)).toBe(true);
+    expect(gameboard.getShipStartCoords(shipX + 4, shipY)).toEqual({
+      x: shipX,
+      y: shipY,
+    });
+  });
 });
