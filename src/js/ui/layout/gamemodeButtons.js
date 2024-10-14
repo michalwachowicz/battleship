@@ -3,22 +3,22 @@ import friendIcon from "../../../assets/icons/friend.svg";
 import botIcon from "../../../assets/icons/bot.svg";
 import gameplayManager from "../gameplayManager";
 import Player from "../../classes/player/player";
-import screenMessages from "../components/messages/screenMessages";
+import { hide } from "../../utils/visibility";
 
 const main = document.querySelector(".main");
 const section = document.querySelector(".gamemode-btns");
 
 export default function createGamemodeSection() {
   const friendBtn = createGamemodeButton("FRIEND", friendIcon, () => {
-    main.classList.add("hidden");
-    screenMessages.get("hideScreen").open();
+    hide(main);
+    gameplayManager.screenMessages.hideScreen.open();
   });
 
   const botBtn = createGamemodeButton("BOT", botIcon, () => {
-    const player = new Player(false);
-    const bot = new Player(true);
+    const player = new Player();
+    const bot = new Player("BOT", true);
 
-    gameplayManager.startGame(".main", player, bot);
+    gameplayManager.init(".main", player, bot);
   });
 
   section.append(friendBtn, botBtn);
