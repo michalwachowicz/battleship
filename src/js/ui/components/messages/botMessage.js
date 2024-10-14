@@ -18,6 +18,7 @@ export default class BotMessage {
       if (placedShips.length === 0) {
         callback();
         this.close();
+        return;
       }
 
       const ship = placedShips.pop();
