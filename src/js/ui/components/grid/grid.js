@@ -1,5 +1,5 @@
 import cleanContainer from "../../../utils/containerCleaner";
-import ships from "../../models/ships";
+import shipModels from "../../models/shipModels";
 
 export default class Grid {
   constructor(selector) {
@@ -41,7 +41,7 @@ export default class Grid {
     const placedShip = document.createElement("div");
 
     placedShip.classList.add("placed-ship");
-    placedShip.innerHTML = ships.getModel(name);
+    placedShip.innerHTML = shipModels.getModel(name);
 
     placedShip.dataset.name = name;
     placedShip.dataset.length = length;

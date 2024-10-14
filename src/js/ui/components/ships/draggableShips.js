@@ -1,5 +1,5 @@
 import cleanContainer from "../../../utils/containerCleaner";
-import ships from "../../models/ships";
+import shipModels from "../../models/shipModels";
 
 export default class DraggableShips {
   constructor(selector) {
@@ -17,7 +17,7 @@ export default class DraggableShips {
       const ship = document.createElement("div");
 
       ship.className = "ship";
-      ship.innerHTML = ships.getModel(name);
+      ship.innerHTML = shipModels.getModel(name);
       ship.setAttribute("draggable", true);
 
       ship.dataset.name = name;
