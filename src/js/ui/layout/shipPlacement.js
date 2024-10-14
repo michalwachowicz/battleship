@@ -8,7 +8,9 @@ export default class ShipPlacement {
     this.shipsArr = shipsArr;
 
     this.grid = new PlacementGrid(selectors.grid);
-    this.draggableShips = new DraggableShips(selectors.ships);
+    this.draggableShips = new DraggableShips(selectors.ships, (event) =>
+      this.handleDragStart(event, ".ship")
+    );
 
     this.randomizeBtn = document.querySelector(selectors.randomizeBtn);
     this.playBtn = document.querySelector(selectors.playBtn);
@@ -35,9 +37,7 @@ export default class ShipPlacement {
     this.grid.init(gameboard);
     this.grid.render();
 
-    this.draggableShips.render(this.shipsArr, (event) =>
-      this.handleDragStart(event, ".ship")
-    );
+    this.draggableShips.render(this.shipsArr);
 
     this.playBtn.onclick = onPlay;
     this.showPlayButton();

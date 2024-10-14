@@ -1,31 +1,18 @@
-import cleanContainer from "../../../utils/containerCleaner";
-import shipModels from "../../models/shipModels";
+import Ships from "./ships";
 
-export default class DraggableShips {
-  constructor(selector) {
-    this.container = document.querySelector(selector);
+export default class DraggableShips extends Ships {
+  constructor(selector, onDragStart) {
+    super(selector, "ship-draggable");
+
+    this.onDragStart = onDragStart;
   }
 
-  clear() {
-    cleanContainer(this.container);
-  }
+  createShip(ship) {
+    const shipElement = super.createShip(ship);
 
-  render(array, onDragStart) {
-    this.clear();
+    shipElement.setAttribute("draggable", true);
+    shipElement.addEventListener("dragstart", this.onDragStart);
 
-    array.forEach(({ name, length, horizontal }) => {
-      const ship = document.createElement("div");
-
-      ship.className = "ship";
-      ship.innerHTML = shipModels.getModel(name);
-      ship.setAttribute("draggable", true);
-
-      ship.dataset.name = name;
-      ship.dataset.length = length;
-      ship.dataset.horizontal = horizontal;
-
-      ship.addEventListener("dragstart", onDragStart);
-      this.container.appendChild(ship);
-    });
+    return shipElement;
   }
 }
