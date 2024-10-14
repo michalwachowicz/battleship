@@ -11,4 +11,18 @@
     transform: rotate(90deg) translateY(-100%);
     transform-origin: top left;
   }
+
+  &-sunk {
+    path {
+      fill: #dc2626;
+    }
+  }
+}
+
+.ship {
+  &-gameplay-sunk {
+    path {
+      fill: #dc2626;
+    }
+  }
 }

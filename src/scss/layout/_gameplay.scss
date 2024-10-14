@@ -1,0 +1,47 @@
+.gameplay {
+  gap: 5rem;
+
+  &,
+  &-wrapper,
+  &-container,
+  &-ships {
+    display: flex;
+  }
+
+  &-wrapper {
+    flex-direction: column;
+    flex: 1;
+    gap: 1rem;
+  }
+
+  &-container {
+    flex: 1;
+    gap: 1rem;
+
+    &-player-2 {
+      flex-direction: row-reverse;
+    }
+  }
+
+  &-name {
+    font-size: 2rem;
+    font-weight: 700;
+
+    &-inactive {
+      color: rgba(224, 255, 255, 0.5);
+    }
+
+    &-player-1 {
+      align-self: end;
+    }
+  }
+
+  &-ships {
+    flex-direction: column;
+    gap: 1.5rem;
+
+    &-player-1 {
+      align-items: end;
+    }
+  }
+}

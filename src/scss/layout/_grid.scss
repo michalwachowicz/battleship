@@ -11,8 +11,31 @@
   border: 2px solid #1972c2;
   background-color: #1972c2;
 
+  &-gameplay {
+    .grid-item:hover {
+      cursor: pointer;
+      background-color: #005599; // TODO: CHANGE COLOR
+    }
+
+    &-inactive::after {
+      content: "";
+      position: absolute;
+      width: calc(100% + 4px);
+      height: calc(100% + 4px);
+      top: -2px;
+      left: -2px;
+      background-color: rgba(0, 0, 0, 0.25);
+      z-index: 999;
+    }
+  }
+
   &-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: #003366;
+    transition: background-color 0.25s ease;
 
     &-valid {
       background-color: #16a34a;
@@ -20,6 +43,11 @@
 
     &-invalid {
       background-color: #dc2626;
+    }
+
+    > svg {
+      width: 100%;
+      height: 100%;
     }
   }
 }
