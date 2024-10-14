@@ -1,5 +1,7 @@
 import getRandomCoordinates from "../../../utils/coordsUtil";
 import Grid from "./grid";
+import hitImage from "../../../../assets/images/cells/hit.svg";
+import missImage from "../../../../assets/images/cells/miss.svg";
 
 export default class GameplayGrid extends Grid {
   constructor(selector, onActiveChange, onShipSunk, onGameOver) {
@@ -31,25 +33,23 @@ export default class GameplayGrid extends Grid {
 
     opponent.attack(this.player, x, y);
 
+    const cellElement = cell;
     const { ship } = gridItem;
+
     if (!ship) {
-      cell.classList.add("grid-item-attacked");
-      // TODO: Set icon for after selector
+      cellElement.classList.add("grid-item-attacked");
+      cellElement.innerHTML = missImage;
     } else if (ship.isSunk()) {
       if (this.player.gameboard.allShipsSunk()) {
         this.onGameOver(opponent); // Pass the winner
         return;
       }
 
-      const shipElement = this.container.querySelector(
-        `.placed-ship[data-name="${ship.name}"]`
-      );
-
-      shipElement.classList.add("placed-ship-sunk");
+      // TODO: Add a ship image with placed-ship-sunk class + remove image from hit cells
       this.onShipSunk(this.player, ship);
     } else {
-      cell.classList.add("grid-item-hit");
-      // TODO: Set icon for after selector
+      cellElement.classList.add("grid-item-hit");
+      cellElement.innerHTML = hitImage;
     }
 
     this.active = false;
