@@ -15,6 +15,8 @@ export default class GameplayGrid extends Grid {
     this.opponentGrid = null;
     this.active = false;
 
+    this.botHitCoords = null;
+
     this.container.addEventListener("click", this.handleCellClick.bind(this));
   }
 
@@ -27,7 +29,7 @@ export default class GameplayGrid extends Grid {
     this.render();
   }
 
-  attack(cell, opponent, x, y) {
+  attack(cell, opponent, x, y, isBotTurn = false) {
     const { gameboard } = this.player;
     const gridItem = gameboard.grid[x][y];
 
@@ -52,10 +54,14 @@ export default class GameplayGrid extends Grid {
 
       this.renderShip(ship, shipX, shipY);
       this.onShipSunk(this.player, ship);
+
+      if (isBotTurn) this.botHitCoords = null;
       return;
     } else {
       cellElement.classList.add("grid-item-hit");
       cellElement.innerHTML = hitImage;
+
+      if (isBotTurn) this.botHitCoords = { x, y };
       return;
     }
 
@@ -63,7 +69,7 @@ export default class GameplayGrid extends Grid {
     this.opponentGrid.active = true;
     this.onActiveChange(this.opponentGrid.player);
 
-    if (this.player.computer) this.handleBotTurn();
+    if (this.player.computer && !isBotTurn) this.handleBotTurn();
   }
 
   renderShip(ship, x, y) {
@@ -105,15 +111,46 @@ export default class GameplayGrid extends Grid {
     const botMakeMove = () => {
       if (this.active) return;
 
-      const { x, y } = getRandomCoordinates(this.opponentGrid.player.gameboard);
+      let x;
+      let y;
+
+      if (this.opponentGrid.botHitCoords) {
+        ({ x, y } = this.getBotAdjacentCoords());
+
+        if (x === null || y === null) {
+          ({ x, y } = getRandomCoordinates(this.opponentGrid.player.gameboard));
+        }
+      } else {
+        ({ x, y } = getRandomCoordinates(this.opponentGrid.player.gameboard));
+      }
+
       const cell = this.opponentGrid.container.querySelector(
         `[data-x="${x}"][data-y="${y}"]`
       );
 
-      this.opponentGrid.attack(cell, this.player, x, y);
+      this.opponentGrid.attack(cell, this.player, x, y, true);
       setTimeout(botMakeMove, 1000);
     };
 
     setTimeout(botMakeMove, 1000);
+  }
+
+  getBotAdjacentCoords() {
+    const { x: currentX, y: currentY } = this.opponentGrid.botHitCoords;
+    const { size, grid } = this.opponentGrid.player.gameboard;
+
+    const directions = [
+      { x: currentX - 1, y: currentY },
+      { x: currentX, y: currentY + 1 },
+      { x: currentX + 1, y: currentY },
+      { x: currentX, y: currentY - 1 },
+    ];
+
+    const target = directions.find(
+      ({ x, y }) =>
+        x >= 0 && x < size && y >= 0 && y < size && !grid[x][y].attacked
+    );
+
+    return target || { x: null, y: null };
   }
 }
