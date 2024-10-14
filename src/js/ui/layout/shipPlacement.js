@@ -1,5 +1,5 @@
 import Ship from "../../classes/ship/ship";
-import copyArray from "../../utils/arrayUtil";
+import copyShipsArray from "../../utils/arrayUtil";
 import isDefinedNumber from "../../utils/numbersUtil";
 import { hide, show } from "../../utils/visibility";
 import PlacementGrid from "../components/grid/placementGrid";
@@ -7,7 +7,7 @@ import DraggableShips from "../components/ships/draggableShips";
 
 export default class ShipPlacement {
   constructor(shipsArr, selectors) {
-    this.shipsArr = copyArray(shipsArr);
+    this.shipsArr = copyShipsArray(shipsArr);
 
     this.grid = new PlacementGrid(selectors.grid);
     this.draggableShips = new DraggableShips(selectors.ships, (event) =>
@@ -40,7 +40,7 @@ export default class ShipPlacement {
     this.grid.init(gameboard);
     this.grid.render();
 
-    this.draggableShips.render(copyArray(this.shipsArr));
+    this.draggableShips.render(copyShipsArray(this.shipsArr));
 
     this.playBtn.onclick = onPlay;
     this.showPlayButton();
@@ -113,7 +113,7 @@ export default class ShipPlacement {
 
   handleRandomize() {
     this.gameboard.clear();
-    this.gameboard.randomize(copyArray(this.shipsArr));
+    this.gameboard.randomize(copyShipsArray(this.shipsArr));
 
     this.grid.render();
     this.draggableShips.clear();

@@ -1,10 +1,10 @@
-import copyArray from "../../utils/arrayUtil";
+import copyShipsArray from "../../utils/arrayUtil";
 import GameplayGrid from "../components/grid/gameplayGrid";
 import Ships from "../components/ships/ships";
 
 export default class Gameplay {
   constructor(shipsArr, onGameOver) {
-    this.shipsArr = copyArray(shipsArr);
+    this.shipsArr = copyShipsArray(shipsArr);
     this.onGameOver = onGameOver;
 
     this.wrapper = document.querySelector(".gameplay");
@@ -31,7 +31,7 @@ export default class Gameplay {
       grid.active = index === 1;
 
       name.textContent = player.name;
-      ships.render(copyArray(this.shipsArr));
+      ships.render(copyShipsArray(this.shipsArr));
 
       if (index === 0) this.activate(elements, false);
     });
