@@ -1,3 +1,4 @@
+import getRandomCoordinates from "../../utils/coordsUtil";
 import Player from "./player";
 
 describe("Player", () => {
@@ -35,7 +36,9 @@ describe("Player", () => {
     });
 
     it("attacks opponent with random coords", () => {
-      expect(computer.attack(opponent)).toBe(true);
+      const { x, y } = getRandomCoordinates(opponent.gameboard);
+
+      expect(computer.attack(opponent, x, y)).toBe(true);
       expect(
         opponent.gameboard.grid.flat().filter(({ attacked }) => attacked)
       ).toHaveLength(1);

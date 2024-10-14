@@ -1,16 +1,14 @@
-import getRandomCoordinates from "../../utils/coordsUtil";
 import Gameboard from "../gameboard/gameboard";
 
 export default class Player {
-  constructor(computer = false) {
+  constructor(name = "HUMAN", computer = false) {
+    this.name = name;
     this.computer = computer;
     this.gameboard = new Gameboard();
   }
 
+  // eslint-disable-next-line class-methods-use-this
   attack({ gameboard }, x, y) {
-    if (!this.computer) return gameboard.receiveAttack(x, y);
-
-    const { x: randomX, y: randomY } = getRandomCoordinates(gameboard);
-    return gameboard.receiveAttack(x || randomX, y || randomY);
+    return gameboard.receiveAttack(x, y);
   }
 }
