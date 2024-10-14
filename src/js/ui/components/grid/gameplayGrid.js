@@ -28,7 +28,9 @@ export default class GameplayGrid extends Grid {
   }
 
   attack(cell, opponent, x, y) {
-    const gridItem = this.player.gameboard.grid[x][y];
+    const { gameboard } = this.player;
+    const gridItem = gameboard.grid[x][y];
+
     if (gridItem.attacked) return;
 
     opponent.attack(this.player, x, y);
@@ -40,12 +42,14 @@ export default class GameplayGrid extends Grid {
       cellElement.classList.add("grid-item-attacked");
       cellElement.innerHTML = missImage;
     } else if (ship.isSunk()) {
-      if (this.player.gameboard.allShipsSunk()) {
+      if (gameboard.allShipsSunk()) {
         this.onGameOver(opponent); // Pass the winner
         return;
       }
 
-      // TODO: Add a ship image with placed-ship-sunk class + remove image from hit cells
+      const { x: shipX, y: shipY } = gameboard.getShipStartCoords(x, y);
+
+      this.renderShip(ship, shipX, shipY);
       this.onShipSunk(this.player, ship);
     } else {
       cellElement.classList.add("grid-item-hit");
@@ -57,6 +61,27 @@ export default class GameplayGrid extends Grid {
     this.onActiveChange(this.opponentGrid.player);
 
     if (this.player.computer) this.handleBotTurn();
+  }
+
+  renderShip(ship, x, y) {
+    const shipElement = super.renderShip(ship, x, y);
+    shipElement.classList.add("placed-ship-sunk");
+
+    const { horizontal, length } = ship;
+    const clearCell = (i, j) => {
+      const cell = this.container.querySelector(
+        `[data-x="${i}"][data-y="${j}"]`
+      );
+      if (cell) cell.innerHTML = "";
+    };
+
+    if (horizontal) {
+      for (let i = y; i < y + length; i += 1) clearCell(x, i);
+    } else {
+      for (let i = x; i < x + length; i += 1) clearCell(i, y);
+    }
+
+    return shipElement;
   }
 
   handleCellClick(event) {
