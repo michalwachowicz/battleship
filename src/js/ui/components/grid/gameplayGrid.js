@@ -51,9 +51,11 @@ export default class GameplayGrid extends Grid {
 
       this.renderShip(ship, shipX, shipY);
       this.onShipSunk(this.player, ship);
+      return;
     } else {
       cellElement.classList.add("grid-item-hit");
       cellElement.innerHTML = hitImage;
+      return;
     }
 
     this.active = false;
