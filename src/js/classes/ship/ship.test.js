@@ -25,4 +25,13 @@ describe("Ship", () => {
     for (let i = 0; i < LENGTH; i += 1) ship.hit();
     expect(ship.isSunk()).toBe(true);
   });
+
+  it("resets the ship properly", () => {
+    ship.horizontal = false;
+    ship.hit();
+    ship.reset();
+
+    expect(ship.hits).toBe(0);
+    expect(ship.horizontal).toBe(true);
+  });
 });
