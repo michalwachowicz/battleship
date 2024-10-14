@@ -100,7 +100,7 @@ export default class GameplayGrid extends Grid {
 
   handleBotTurn() {
     setTimeout(() => {
-      const { x, y } = getRandomCoordinates(this.player.gameboard);
+      const { x, y } = getRandomCoordinates(this.opponentGrid.player.gameboard);
       const cell = this.opponentGrid.container.querySelector(
         `[data-x="${x}"][data-y="${y}"]`
       );
