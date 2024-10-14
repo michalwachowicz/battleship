@@ -43,6 +43,7 @@ export default class GameplayGrid extends Grid {
       cellElement.innerHTML = missImage;
     } else if (ship.isSunk()) {
       if (gameboard.allShipsSunk()) {
+        this.active = false;
         this.onGameOver(opponent); // Pass the winner
         return;
       }
@@ -101,13 +102,18 @@ export default class GameplayGrid extends Grid {
   }
 
   handleBotTurn() {
-    setTimeout(() => {
+    const botMakeMove = () => {
+      if (this.active) return;
+
       const { x, y } = getRandomCoordinates(this.opponentGrid.player.gameboard);
       const cell = this.opponentGrid.container.querySelector(
         `[data-x="${x}"][data-y="${y}"]`
       );
 
       this.opponentGrid.attack(cell, this.player, x, y);
-    }, 1000);
+      setTimeout(botMakeMove, 1000);
+    };
+
+    setTimeout(botMakeMove, 1000);
   }
 }
