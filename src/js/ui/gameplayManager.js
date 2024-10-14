@@ -73,8 +73,18 @@ class GameplayManager {
     replaceScreen(previousSelector, this.gameplay.wrapper);
   }
 
+  resetShips() {
+    const { player1, player2 } = this.gameplay.elements;
+
+    [player1, player2].forEach(({ grid }) =>
+      grid.player.gameboard.ships.forEach((ship) => ship.reset())
+    );
+  }
+
   onGameOver(player) {
     hide(this.gameplay.wrapper);
+
+    this.resetShips();
     this.gameOverMessage.open(player);
   }
 }
