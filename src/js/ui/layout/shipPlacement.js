@@ -13,6 +13,7 @@ export default class ShipPlacement {
       this.handleDragStart(event, ".ship")
     );
 
+    this.wrapper = document.querySelector(selectors.wrapper);
     this.randomizeBtn = document.querySelector(selectors.randomizeBtn);
     this.playBtn = document.querySelector(selectors.playBtn);
 
