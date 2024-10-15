@@ -14,9 +14,19 @@ $lengths: (
 }
 
 .ship {
+  $ship-color: #cbd5e1;
+
+  path {
+    fill: $ship-color;
+  }
+
   &-placed {
     position: absolute;
     overflow: visible;
+
+    path {
+      fill: $ship-color;
+    }
 
     > svg {
       width: 100%;
