@@ -1,5 +1,12 @@
 .gameplay {
+  max-width: 1200px;
+  margin: 0 auto;
   gap: 5rem;
+  padding: 2rem;
+
+  @media screen and (max-width: 768px) {
+    gap: 2.5rem;
+  }
 
   &,
   &-wrapper,
@@ -16,6 +23,7 @@
 
   &-container {
     flex: 1;
+    align-items: start;
     gap: 1rem;
 
     &-player-2 {
@@ -38,10 +46,15 @@
 
   &-ships {
     flex-direction: column;
-    gap: 1.5rem;
+    gap: calc(5vw - 4vh + 4px);
+    width: clamp(50px, 8vw, 125px);
 
     &-player-1 {
       align-items: end;
+    }
+
+    svg {
+      height: auto;
     }
   }
 }

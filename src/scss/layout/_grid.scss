@@ -5,25 +5,31 @@
   grid-template-rows: repeat(10, 1fr);
   gap: 2px;
   overflow: visible;
-  max-width: 30rem;
-  width: 100%;
+  width: min(100vh, 100%, 30rem);
+  height: auto;
   aspect-ratio: 1 / 1;
-  border: 2px solid #1972c2;
   background-color: #1972c2;
+
+  $border-width: 2px;
+  border: $border-width solid #1972c2;
+
+  &-ship-placement {
+    width: min(80vh, 100%, 30rem);
+  }
 
   &-gameplay {
     .grid-item:hover {
       cursor: pointer;
-      background-color: #005599; // TODO: CHANGE COLOR
+      background-color: #005599;
     }
 
     &-inactive::after {
       content: "";
       position: absolute;
-      width: calc(100% + 4px);
-      height: calc(100% + 4px);
-      top: -2px;
-      left: -2px;
+      width: calc(100% + 2 * $border-width);
+      height: calc(100% + 2 * $border-width);
+      top: -$border-width;
+      left: -$border-width;
       background-color: rgba(0, 0, 0, 0.25);
       z-index: 999;
     }

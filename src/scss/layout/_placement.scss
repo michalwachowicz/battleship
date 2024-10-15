@@ -1,19 +1,20 @@
 .ship-placement {
-  padding: 7rem 0;
+  padding: 4rem 0;
 
   &-btns,
   &-container {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: start;
   }
 
   &-container {
-    gap: 4.5rem;
+    gap: 2rem;
+    padding: 0 6rem;
   }
 
   &-btns {
-    margin-top: 5rem;
+    margin-top: 3rem;
     gap: 5rem;
 
     > .btn {
@@ -24,6 +25,7 @@
   &-ships {
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+    gap: calc(5vw - 6vh + 4px);
+    width: clamp(100px, 20vw, 250px);
   }
 }

@@ -7,12 +7,32 @@
   max-width: calc(700px + 3rem);
   padding: 3rem 0;
   margin: 0 auto;
-  gap: 7rem;
 
   &-text {
     color: #fff;
     text-align: center;
     font-size: 3rem;
     font-weight: 700;
+
+    &-winner {
+      margin-top: 1rem;
+      font-weight: 400;
+      font-size: 2.5rem;
+    }
+  }
+
+  &-bot {
+    gap: 3rem;
+
+    &-ships {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2.5rem;
+    }
+  }
+
+  > .btn {
+    margin-top: 3rem;
   }
 }
