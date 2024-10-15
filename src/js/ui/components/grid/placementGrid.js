@@ -45,10 +45,18 @@ export default class PlacementGrid extends Grid {
     const placedShip = super.renderShip(ship, x, y);
 
     placedShip.setAttribute("draggable", true);
-    placedShip.addEventListener("mousedown", this.handleMouseDown.bind(this));
-    placedShip.addEventListener("mousemove", this.handleMouseDown.bind(this));
+
+    placedShip.addEventListener("mousedown", this.handleStart.bind(this));
+    placedShip.addEventListener("touchstart", this.handleStart.bind(this));
+
+    placedShip.addEventListener("mousemove", this.handleMove.bind(this));
+    placedShip.addEventListener("touchmove", this.handleMove.bind(this));
+
     placedShip.addEventListener("mouseup", () =>
-      this.handleMouseUp(ship, placedShip)
+      this.handleEnd(ship, placedShip)
+    );
+    placedShip.addEventListener("touchend", () =>
+      this.handleEnd(ship, placedShip)
     );
 
     return placedShip;
@@ -76,20 +84,20 @@ export default class PlacementGrid extends Grid {
     shipElement.style.width = this.calculateShipWidth(y + 1, ship.length);
   }
 
-  handleMouseDown(event) {
+  handleStart(event) {
     this.isDragging = false;
-    this.startX = event.clientX;
-    this.startY = event.clientY;
+    this.startX = event.clientX || event.touches[0].clientX;
+    this.startY = event.clientY || event.touches[0].clientY;
   }
 
-  handleMouseMove(event) {
-    const x = this.startX - event.clientX;
-    const y = this.startY - event.clientY;
+  handleMove(event) {
+    const x = this.startX - (event.clientX || event.touches[0].clientX);
+    const y = this.startY - (event.clientY || event.touches[0].clientY);
 
     if (Math.abs(x) > 5 || Math.abs(y) > 5) this.isDragging = true;
   }
 
-  handleMouseUp(ship, shipElement) {
+  handleEnd(ship, shipElement) {
     if (!this.isDragging) this.rotateShip(ship, shipElement);
 
     this.isDragging = false;

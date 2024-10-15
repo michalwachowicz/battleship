@@ -10,8 +10,12 @@ export default class ShipPlacement {
     this.shipsArr = copyShipsArray(shipsArr);
 
     this.grid = new PlacementGrid(selectors.grid);
-    this.draggableShips = new DraggableShips(selectors.ships, (event) =>
-      this.handleDragStart(event, ".ship", false)
+    this.draggableShips = new DraggableShips(
+      selectors.ships,
+      (event) => this.handleDragStart(event, ".ship", false),
+      (event) => this.handleTouchStart(event, ".ship", false),
+      (event) => this.handleTouchMove(event, false),
+      this.handleTouchEnd.bind(this)
     );
 
     this.wrapper = document.querySelector(selectors.wrapper);
@@ -76,6 +80,19 @@ export default class ShipPlacement {
     }
   }
 
+  handleTouchStart(event, shipClass) {
+    event.preventDefault();
+
+    const { clientX, clientY } = event.touches[0];
+    const targetElement = document.elementFromPoint(clientX, clientY);
+    const shipElement = targetElement.closest(shipClass);
+    const { name, length, horizontal } = shipElement.dataset;
+    const ship = new Ship(name, parseInt(length, 10), horizontal === "true");
+
+    this.draggedShip = ship;
+    this.draggedShipElement = shipElement;
+  }
+
   handleDragOver(event) {
     event.preventDefault();
 
@@ -91,6 +108,36 @@ export default class ShipPlacement {
     const valid = this.gameboard.isValidPlacement(this.draggedShip, x, y);
 
     this.grid.highlightCells(this.draggedShip, x, y, valid);
+  }
+
+  handleTouchMove(event, remove) {
+    event.preventDefault();
+
+    if (!this.draggedShip) return;
+    if (remove && this.grid.isDragging) this.removeMovedShip();
+
+    this.grid.resetHighlight();
+
+    const { clientX, clientY } = event.touches[0];
+
+    this.draggedShipElement.style.position = "fixed";
+    this.draggedShipElement.style.left = `${clientX + 4}px`;
+    this.draggedShipElement.style.top = `${clientY + 4}px`;
+    this.draggedShipElement.style.width = `${this.draggedShip.length * 25}px`;
+
+    const targetElement = document.elementFromPoint(clientX, clientY);
+    const gridItem = targetElement.closest(".grid-item");
+
+    if (gridItem && gridItem.dataset.x && gridItem.dataset.y) {
+      const x = parseInt(gridItem.dataset.x, 10);
+      const y = parseInt(gridItem.dataset.y, 10);
+
+      if (!isDefinedNumber(x) || !isDefinedNumber(y)) return;
+
+      const valid = this.gameboard.isValidPlacement(this.draggedShip, x, y);
+
+      this.grid.highlightCells(this.draggedShip, x, y, valid);
+    }
   }
 
   handleDrop(event) {
@@ -110,6 +157,42 @@ export default class ShipPlacement {
     ) {
       this.placeShipOnGrid(this.draggedShip, x, y);
     }
+
+    this.grid.resetHighlight();
+
+    this.draggedShip = null;
+    this.draggedShipElement = null;
+  }
+
+  handleTouchEnd(event) {
+    event.preventDefault();
+
+    if (!this.draggedShip) return;
+
+    const { clientX, clientY } = event.changedTouches[0];
+    const targetElement = document.elementFromPoint(clientX, clientY);
+    const gridItem = targetElement.closest(".grid-item");
+
+    if (gridItem && gridItem.dataset.x && gridItem.dataset.y) {
+      let x = parseInt(gridItem.dataset.x, 10);
+      let y = parseInt(gridItem.dataset.y, 10);
+
+      if (!isDefinedNumber(x) || !isDefinedNumber(y)) {
+        [x, y] = this.draggedShipElement.style.gridArea.split(" / ");
+      }
+
+      if (
+        isDefinedNumber(x) &&
+        isDefinedNumber(y) &&
+        this.gameboard.isValidPlacement(this.draggedShip, x, y)
+      ) {
+        this.placeShipOnGrid(this.draggedShip, x, y);
+      }
+    }
+
+    ["position", "left", "top", "width"].forEach((property) =>
+      this.draggedShipElement.style.removeProperty(property)
+    );
 
     this.grid.resetHighlight();
 
@@ -149,6 +232,13 @@ export default class ShipPlacement {
     placedShip.addEventListener("dragstart", (event) =>
       this.handleDragStart(event, ".ship-placed", true)
     );
+    placedShip.addEventListener("touchstart", (event) =>
+      this.handleTouchStart(event, ".ship-placed")
+    );
+    placedShip.addEventListener("touchmove", (event) =>
+      this.handleTouchMove(event, true)
+    );
+    placedShip.addEventListener("touchend", this.handleTouchEnd.bind(this));
 
     this.toggleComponentsVisibility();
   }
