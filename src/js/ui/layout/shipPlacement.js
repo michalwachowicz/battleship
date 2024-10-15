@@ -43,7 +43,7 @@ export default class ShipPlacement {
     this.draggableShips.render(copyShipsArray(this.shipsArr));
 
     this.playBtn.onclick = onPlay;
-    this.showPlayButton();
+    this.toggleComponentsVisibility();
   }
 
   handleDragStart(event, shipClass) {
@@ -144,7 +144,7 @@ export default class ShipPlacement {
       this.handleDragStart(event, ".placed-ship")
     );
 
-    this.showPlayButton();
+    this.toggleComponentsVisibility();
   }
 
   removeMovedShip() {
@@ -163,14 +163,16 @@ export default class ShipPlacement {
     this.renderPlacedShip(ship, x, y);
   }
 
-  showPlayButton() {
+  toggleComponentsVisibility() {
     const { placedShips } = this.grid;
     if (!placedShips || !this.shipsArr) return;
 
     if (placedShips.size === this.shipsArr.length) {
       show(this.playBtn);
+      hide(this.draggableShips.container);
     } else {
       hide(this.playBtn);
+      show(this.draggableShips.container);
     }
   }
 }
