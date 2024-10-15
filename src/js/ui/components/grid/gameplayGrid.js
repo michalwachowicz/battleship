@@ -16,6 +16,8 @@ export default class GameplayGrid extends Grid {
     this.active = false;
 
     this.botHitCoords = null;
+    this.botHitOrientation = null;
+    this.botHitDirection = null;
 
     this.container.addEventListener("click", this.handleCellClick.bind(this));
   }
@@ -43,6 +45,18 @@ export default class GameplayGrid extends Grid {
     if (!ship) {
       cellElement.classList.add("grid-item-attacked");
       cellElement.innerHTML = missImage;
+
+      if (isBotTurn && this.botHitCoords) {
+        const { x: botX, y: botY } = this.botHitCoords;
+        const { ship: botShip } = gameboard.grid[botX][botY];
+
+        if (!botShip.isSunk()) {
+          this.botHitDirection = this.flipDirection(
+            this.botHitOrientation,
+            this.botHitDirection
+          );
+        }
+      }
     } else if (ship.isSunk()) {
       if (gameboard.allShipsSunk()) {
         this.active = false;
@@ -55,13 +69,20 @@ export default class GameplayGrid extends Grid {
       this.renderShip(ship, shipX, shipY);
       this.onShipSunk(this.player, ship);
 
-      if (isBotTurn) this.botHitCoords = null;
+      if (isBotTurn) {
+        this.botHitCoords = null;
+        this.botHitOrientation = null;
+        this.botHitDirection = null;
+      }
       return;
     } else {
       cellElement.classList.add("grid-item-hit");
       cellElement.innerHTML = hitImage;
 
-      if (isBotTurn) this.botHitCoords = { x, y };
+      if (isBotTurn) {
+        this.determineBotOrientation(x, y);
+        this.botHitCoords = { x, y };
+      }
       return;
     }
 
@@ -136,21 +157,85 @@ export default class GameplayGrid extends Grid {
   }
 
   getBotAdjacentCoords() {
-    const { x: currentX, y: currentY } = this.opponentGrid.botHitCoords;
-    const { size, grid } = this.opponentGrid.player.gameboard;
+    let { x, y } = this.opponentGrid.botHitCoords;
+    const { gameboard } = this.opponentGrid.player;
+    const { size, grid } = gameboard;
 
-    const directions = [
-      { x: currentX - 1, y: currentY },
-      { x: currentX, y: currentY + 1 },
-      { x: currentX + 1, y: currentY },
-      { x: currentX, y: currentY - 1 },
-    ];
+    const { botHitOrientation, botHitDirection } = this.opponentGrid;
+    if (!botHitOrientation || !botHitDirection) {
+      const directions = [
+        { x, y: y + 1 }, // right
+        { x, y: y - 1 }, // left
+        { x: x + 1, y }, // down
+        { x: x - 1, y }, // Up
+      ];
 
-    const target = directions.find(
-      ({ x, y }) =>
-        x >= 0 && x < size && y >= 0 && y < size && !grid[x][y].attacked
-    );
+      const target = directions.find(
+        ({ x: nx, y: ny }) =>
+          nx >= 0 && nx < size && ny >= 0 && ny < size && !grid[nx][ny].attacked
+      );
 
-    return target || { x: null, y: null };
+      return target || { x: null, y: null };
+    }
+
+    const directions = {
+      horizontal: {
+        right: { x: 0, y: 1 },
+        left: { x: 0, y: -1 },
+      },
+      vertical: {
+        top: { x: 1, y: 0 },
+        bottom: { x: -1, y: 0 },
+      },
+    };
+    let direction = directions[botHitOrientation][botHitDirection];
+
+    while (grid[x][y].attacked) {
+      const newX = x + direction.x;
+      const newY = y + direction.y;
+
+      if (newX < 0 || newX >= size || newY < 0 || newY >= size) {
+        const newDirection = this.flipDirection(
+          botHitOrientation,
+          botHitDirection
+        );
+
+        this.opponentGrid.botHitDirection = newDirection;
+        direction = directions[botHitOrientation][newDirection];
+      }
+
+      x += direction.x;
+      y += direction.y;
+    }
+
+    return { x, y };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  flipDirection(orientation, direction) {
+    if (!orientation || !direction) return null;
+
+    const oppositeDirections = {
+      horizontal: { right: "left", left: "right" },
+      vertical: { top: "bottom", bottom: "top" },
+    };
+    return oppositeDirections[orientation][direction];
+  }
+
+  determineBotOrientation(x, y) {
+    if (!this.botHitCoords) {
+      this.botHitOrientation = null;
+      return;
+    }
+
+    const { x: prevX, y: prevY } = this.botHitCoords;
+
+    if (prevX === x && Math.abs(prevY - y) === 1) {
+      this.botHitOrientation = "horizontal";
+      this.botHitDirection = Math.random() > 0.5 ? "right" : "left";
+    } else if (prevY === y && Math.abs(prevX - x) === 1) {
+      this.botHitOrientation = "vertical";
+      this.botHitDirection = Math.random() > 0.5 ? "top" : "bottom";
+    }
   }
 }
