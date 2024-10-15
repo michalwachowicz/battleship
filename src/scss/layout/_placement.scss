@@ -1,5 +1,7 @@
 .ship-placement {
-  padding: 4rem 0;
+  &-wrapper {
+    padding: 4rem 0;
+  }
 
   &-btns,
   &-container {
