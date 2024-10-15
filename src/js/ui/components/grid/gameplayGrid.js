@@ -50,7 +50,7 @@ export default class GameplayGrid extends Grid {
         const { x: botX, y: botY } = this.botHitCoords;
         const { ship: botShip } = gameboard.grid[botX][botY];
 
-        if (!botShip.isSunk()) {
+        if (!botShip || !botShip.isSunk()) {
           this.botHitDirection = this.flipDirection(
             this.botHitOrientation,
             this.botHitDirection
