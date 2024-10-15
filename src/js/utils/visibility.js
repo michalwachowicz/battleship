@@ -1,3 +1,5 @@
+import timeout from "./timeout";
+
 const show = (el) => {
   const element = typeof el === "string" ? document.querySelector(el) : el;
   if (element && element instanceof HTMLElement)
@@ -9,11 +11,6 @@ const hide = (el) => {
   if (element && element instanceof HTMLElement)
     element.classList.add("hidden");
 };
-
-const timeout = (ms) =>
-  new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
 
 const replaceScreen = async (prev, curr) => {
   const previous =
