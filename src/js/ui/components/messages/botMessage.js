@@ -1,4 +1,4 @@
-import { hide, show } from "../../../utils/visibility";
+import { replaceScreen } from "../../../utils/visibility";
 import Ships from "../ships/ships";
 
 export default class BotMessage {
@@ -9,18 +9,17 @@ export default class BotMessage {
     this.flipScreen = flipScreen;
   }
 
-  open(callback) {
-    show(this.container);
-
+  open(previous, callback) {
     this.flipScreen.setHidden(this.container);
     this.ships.render(this.shipsArr);
+
+    replaceScreen(previous, this.container);
 
     const placedShips = [...this.shipsArr];
 
     const removeShip = () => {
       if (placedShips.length === 0) {
         callback();
-        this.close();
         return;
       }
 
@@ -37,9 +36,5 @@ export default class BotMessage {
     };
 
     setTimeout(removeShip, 500);
-  }
-
-  close() {
-    hide(this.container);
   }
 }

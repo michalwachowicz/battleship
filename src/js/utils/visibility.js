@@ -10,9 +10,28 @@ const hide = (el) => {
     element.classList.add("hidden");
 };
 
-const replaceScreen = (previous, current) => {
+const timeout = (ms) =>
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+
+const replaceScreen = async (prev, curr) => {
+  const previous =
+    typeof prev === "string" ? document.querySelector(prev) : prev;
+  const current =
+    typeof curr === "string" ? document.querySelector(curr) : curr;
+
+  previous.classList.add("bounce");
+
+  await timeout(300);
   hide(previous);
   show(current);
+
+  previous.classList.remove("bounce");
+  current.classList.add("slide-up");
+
+  await timeout(300);
+  current.classList.remove("slide-up");
 };
 
 export { show, hide, replaceScreen };

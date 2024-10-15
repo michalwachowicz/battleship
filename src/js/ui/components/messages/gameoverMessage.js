@@ -3,10 +3,14 @@ import Message from "./message";
 
 export default class GameoverMessage extends Message {
   constructor(selector, targetSelector, flipScreen) {
-    super(selector, () => {
-      flipScreen.setHidden(targetSelector);
-      replaceScreen(selector, targetSelector);
-    });
+    super(
+      selector,
+      () => {
+        flipScreen.setHidden(targetSelector);
+        replaceScreen(selector, targetSelector);
+      },
+      flipScreen
+    );
 
     this.winner = this.container.querySelector(".message-text-winner");
   }

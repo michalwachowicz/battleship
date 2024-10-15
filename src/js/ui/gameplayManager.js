@@ -53,15 +53,17 @@ class GameplayManager {
 
     this.openShipPlacement(player1.gameboard, previousSelector, () => {
       if (this.player2.computer) {
-        this.botMessage.open(() => {
+        this.botMessage.open(this.shipPlacement.wrapper, () => {
           this.player2.gameboard.randomize(this.shipsArr);
           this.startGame(this.botMessage.container);
         });
       } else {
-        this.screenMessages.passScreen.open();
+        this.flipScreen.setHidden(this.screenMessages.passScreen.container);
+        replaceScreen(
+          this.shipPlacement.wrapper,
+          this.screenMessages.passScreen.container
+        );
       }
-
-      hide(this.shipPlacement.wrapper);
     });
   }
 
