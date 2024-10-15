@@ -2,14 +2,17 @@ import { hide, show } from "../../../utils/visibility";
 import Ships from "../ships/ships";
 
 export default class BotMessage {
-  constructor(selector, shipsSelector, shipsArr) {
+  constructor(selector, shipsSelector, shipsArr, flipScreen) {
     this.container = document.querySelector(selector);
     this.ships = new Ships(shipsSelector, "ship-bot");
     this.shipsArr = shipsArr;
+    this.flipScreen = flipScreen;
   }
 
   open(callback) {
     show(this.container);
+
+    this.flipScreen.setHidden(this.container);
     this.ships.render(this.shipsArr);
 
     const placedShips = [...this.shipsArr];

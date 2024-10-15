@@ -1,6 +1,7 @@
 import Ship from "../classes/ship/ship";
 import { hide, replaceScreen } from "../utils/visibility";
 import BotMessage from "./components/messages/botMessage";
+import FlipScreenMessage from "./components/messages/flipScreenMessage";
 import GameoverMessage from "./components/messages/gameoverMessage";
 import createScreenMessages from "./components/messages/screenMessages";
 import Gameplay from "./layout/gameplay";
@@ -28,13 +29,22 @@ class GameplayManager {
     });
 
     this.gameplay = new Gameplay(this.shipsArr, this.onGameOver.bind(this));
+    this.flipScreen = new FlipScreenMessage(
+      ".message-flip-screen",
+      ".message-flip-screen-icon"
+    );
     this.screenMessages = createScreenMessages(this);
     this.botMessage = new BotMessage(
       ".message-bot",
       ".message-bot-ships",
-      this.shipsArr
+      this.shipsArr,
+      this.flipScreen
     );
-    this.gameOverMessage = new GameoverMessage(".message-gameover", ".main");
+    this.gameOverMessage = new GameoverMessage(
+      ".message-gameover",
+      ".main",
+      this.flipScreen
+    );
   }
 
   init(previousSelector, player1, player2) {
@@ -57,6 +67,7 @@ class GameplayManager {
 
   openShipPlacement(gameboard, previousSelector, onPlay) {
     this.shipPlacement.init(gameboard, onPlay);
+    this.flipScreen.setHidden(this.shipPlacement.wrapper);
     replaceScreen(previousSelector, this.shipPlacement.wrapper);
   }
 
@@ -70,6 +81,7 @@ class GameplayManager {
     if (!this.player1 || !this.player2) return;
 
     this.gameplay.init(this.player1, this.player2);
+    this.flipScreen.setHidden(this.gameplay.wrapper);
     replaceScreen(previousSelector, this.gameplay.wrapper);
   }
 

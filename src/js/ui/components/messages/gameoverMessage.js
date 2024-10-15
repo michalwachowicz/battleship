@@ -2,8 +2,11 @@ import { replaceScreen } from "../../../utils/visibility";
 import Message from "./message";
 
 export default class GameoverMessage extends Message {
-  constructor(selector, targetSelector) {
-    super(selector, () => replaceScreen(selector, targetSelector));
+  constructor(selector, targetSelector, flipScreen) {
+    super(selector, () => {
+      flipScreen.setHidden(targetSelector);
+      replaceScreen(selector, targetSelector);
+    });
 
     this.winner = this.container.querySelector(".message-text-winner");
   }
