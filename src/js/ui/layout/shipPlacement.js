@@ -141,7 +141,7 @@ export default class ShipPlacement {
     const placedShip = this.grid.renderShip(ship, x, y);
 
     placedShip.addEventListener("dragstart", (event) =>
-      this.handleDragStart(event, ".placed-ship")
+      this.handleDragStart(event, ".ship-placed")
     );
 
     this.toggleComponentsVisibility();

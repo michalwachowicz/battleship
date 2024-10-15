@@ -95,7 +95,7 @@ export default class GameplayGrid extends Grid {
 
   renderShip(ship, x, y) {
     const shipElement = super.renderShip(ship, x, y);
-    shipElement.classList.add("placed-ship-sunk");
+    shipElement.classList.add("ship-placed-sunk");
 
     const { horizontal, length } = ship;
     const clearCell = (i, j) => {

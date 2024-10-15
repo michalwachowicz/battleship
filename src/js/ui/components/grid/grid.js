@@ -40,7 +40,7 @@ export default class Grid {
     const { name, length, horizontal } = ship;
     const placedShip = document.createElement("div");
 
-    placedShip.classList.add("placed-ship");
+    placedShip.classList.add("ship-placed");
     placedShip.innerHTML = shipModels.getModel(name);
 
     placedShip.dataset.name = name;
@@ -50,7 +50,7 @@ export default class Grid {
     placedShip.style.gridArea = this.calculateGridArea(ship, x, y);
     placedShip.style.width = this.calculateShipWidth(y + 1, length);
 
-    if (!horizontal) placedShip.classList.add("placed-ship-vertical");
+    if (!horizontal) placedShip.classList.add("ship-placed-vertical");
 
     this.container.appendChild(placedShip);
     this.placedShips.add(ship.name);

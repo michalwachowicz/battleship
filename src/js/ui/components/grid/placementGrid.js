@@ -69,8 +69,8 @@ export default class PlacementGrid extends Grid {
     const horizontal = !(shipElement.dataset.horizontal === "true");
     shipElement.dataset.horizontal = horizontal;
 
-    if (horizontal) shipElement.classList.remove("placed-ship-vertical");
-    else shipElement.classList.add("placed-ship-vertical");
+    if (horizontal) shipElement.classList.remove("ship-placed-vertical");
+    else shipElement.classList.add("ship-placed-vertical");
 
     shipElement.style.width = this.calculateShipWidth(y + 1, ship.length);
   }

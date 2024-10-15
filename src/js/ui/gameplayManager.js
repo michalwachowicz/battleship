@@ -21,7 +21,7 @@ class GameplayManager {
 
     this.shipPlacement = new ShipPlacement(this.shipsArr, {
       wrapper: ".ship-placement",
-      grid: ".ship-placement-grid",
+      grid: ".grid-ship-placement",
       ships: ".ship-placement-ships",
       randomizeBtn: ".btn-randomize",
       playBtn: ".btn-play",
