@@ -11,7 +11,7 @@ export default class ShipPlacement {
 
     this.grid = new PlacementGrid(selectors.grid);
     this.draggableShips = new DraggableShips(selectors.ships, (event) =>
-      this.handleDragStart(event, ".ship")
+      this.handleDragStart(event, ".ship", false)
     );
 
     this.wrapper = document.querySelector(selectors.wrapper);
@@ -46,13 +46,15 @@ export default class ShipPlacement {
     this.toggleComponentsVisibility();
   }
 
-  handleDragStart(event, shipClass) {
+  handleDragStart(event, shipClass, remove) {
     const shipElement = event.target.closest(shipClass);
     const { name, length, horizontal } = shipElement.dataset;
     const ship = new Ship(name, parseInt(length, 10), horizontal === "true");
 
     this.draggedShip = ship;
     this.draggedShipElement = shipElement;
+
+    if (remove) this.removeMovedShip();
 
     if (!ship.horizontal) {
       const svg = shipElement.querySelector("svg").cloneNode(true);
@@ -94,8 +96,12 @@ export default class ShipPlacement {
   handleDrop(event) {
     event.preventDefault();
 
-    const x = parseInt(event.target.dataset.x, 10);
-    const y = parseInt(event.target.dataset.y, 10);
+    let x = parseInt(event.target.dataset.x, 10);
+    let y = parseInt(event.target.dataset.y, 10);
+
+    if (!isDefinedNumber(x) || !isDefinedNumber(y)) {
+      [x, y] = this.draggedShipElement.style.gridArea.split(" / ");
+    }
 
     if (
       isDefinedNumber(x) &&
@@ -141,7 +147,7 @@ export default class ShipPlacement {
     const placedShip = this.grid.renderShip(ship, x, y);
 
     placedShip.addEventListener("dragstart", (event) =>
-      this.handleDragStart(event, ".ship-placed")
+      this.handleDragStart(event, ".ship-placed", true)
     );
 
     this.toggleComponentsVisibility();
@@ -159,7 +165,6 @@ export default class ShipPlacement {
     this.draggedShipElement.remove();
     this.gameboard.placeShip(ship, x, y);
 
-    this.removeMovedShip();
     this.renderPlacedShip(ship, x, y);
   }
 
