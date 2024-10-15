@@ -1,3 +1,4 @@
+import timeout from "../../../utils/timeout";
 import Grid from "./grid";
 
 export default class PlacementGrid extends Grid {
@@ -62,7 +63,7 @@ export default class PlacementGrid extends Grid {
     const y = parseInt(startY - 1, 10);
 
     if (!this.gameboard.rotateShip(x, y)) {
-      // Show animation
+      this.animateInvalidRotation(shipElement);
       return;
     }
 
@@ -92,5 +93,12 @@ export default class PlacementGrid extends Grid {
     if (!this.isDragging) this.rotateShip(ship, shipElement);
 
     this.isDragging = false;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  async animateInvalidRotation(element) {
+    element.classList.add("rotation-invalid");
+    await timeout(300);
+    element.classList.remove("rotation-invalid");
   }
 }
