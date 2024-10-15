@@ -33,7 +33,7 @@ export default class BotMessage {
       setTimeout(removeShip, 500);
     };
 
-    removeShip();
+    setTimeout(removeShip, 500);
   }
 
   close() {
