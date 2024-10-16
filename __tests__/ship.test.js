@@ -1,4 +1,4 @@
-import Ship from "./ship";
+import Ship from "../src/js/game/ship";
 
 const LENGTH = 5;
 

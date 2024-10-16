@@ -1,4 +1,4 @@
-import Player from "../../../classes/player/player";
+import Player from "../../../game/player";
 import Message from "./message";
 
 export default function createScreenMessages(gameplayManager) {

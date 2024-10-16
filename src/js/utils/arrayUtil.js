@@ -1,4 +1,4 @@
-import Ship from "../classes/ship/ship";
+import Ship from "../game/ship";
 
 export default function copyShipsArray(arr) {
   return JSON.parse(JSON.stringify(arr)).map((item) => {

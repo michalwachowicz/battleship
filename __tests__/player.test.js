@@ -1,5 +1,5 @@
-import getRandomCoordinates from "../../utils/coordsUtil";
-import Player from "./player";
+import getRandomCoordinates from "../src/js/utils/coordsUtil";
+import Player from "../src/js/game/player";
 
 describe("Player", () => {
   let opponent;

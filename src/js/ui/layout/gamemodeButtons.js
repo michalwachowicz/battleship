@@ -2,7 +2,7 @@ import createGamemodeButton from "../components/buttons/gamemodeButton";
 import friendIcon from "../../../assets/icons/friend.svg";
 import botIcon from "../../../assets/icons/bot.svg";
 import gameplayManager from "../gameplayManager";
-import Player from "../../classes/player/player";
+import Player from "../../game/player";
 import { replaceScreen } from "../../utils/visibility";
 
 const main = document.querySelector(".main");

@@ -1,5 +1,5 @@
-import Gameboard from "./gameboard";
-import Ship from "../ship/ship";
+import Gameboard from "../src/js/game/gameboard";
+import Ship from "../src/js/game/ship";
 
 describe("Gameboard", () => {
   const shipX = 1;

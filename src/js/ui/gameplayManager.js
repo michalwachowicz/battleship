@@ -1,4 +1,4 @@
-import Ship from "../classes/ship/ship";
+import Ship from "../game/ship";
 import { hide, replaceScreen } from "../utils/visibility";
 import BotMessage from "./components/messages/botMessage";
 import FlipScreenMessage from "./components/messages/flipScreenMessage";

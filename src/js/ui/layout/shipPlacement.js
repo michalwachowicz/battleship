@@ -1,4 +1,4 @@
-import Ship from "../../classes/ship/ship";
+import Ship from "../../game/ship";
 import copyShipsArray from "../../utils/arrayUtil";
 import isDefinedNumber from "../../utils/numbersUtil";
 import { hide, show } from "../../utils/visibility";
