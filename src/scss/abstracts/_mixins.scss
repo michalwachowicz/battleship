@@ -5,3 +5,10 @@
   min-height: $size;
   height: $size;
 }
+
+@mixin reduce-motion() {
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    animation: none;
+  }
+}
