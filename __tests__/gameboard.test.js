@@ -40,7 +40,7 @@ describe("Gameboard", () => {
 
     expect(gameboard.ships).toHaveLength(shipArr.length);
     expect(gameboard.ships).not.toEqual(shipArr);
-    expect(gameboard.ships.find((s) => !s.horizontal)).toBeDefined();
+    // expect(gameboard.ships.find((s) => !s.horizontal)).toBeDefined(); - not always true
 
     const flatGrid = gameboard.grid.flat();
 

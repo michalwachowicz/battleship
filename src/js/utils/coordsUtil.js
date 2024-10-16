@@ -1,3 +1,4 @@
+// Tested in player.test.js
 export default function getRandomCoordinates(gameboard) {
   const { size } = gameboard;
 
