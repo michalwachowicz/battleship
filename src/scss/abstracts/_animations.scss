@@ -1,5 +1,5 @@
 .bounce {
-  animation: bounce 0.3s ease forwards;
+  animation: bounce 0.3s ease-in forwards;
 }
 
 @keyframes bounce {
@@ -17,7 +17,7 @@
 }
 
 .slide-up {
-  animation: slide-up 0.3s ease forwards;
+  animation: slide-up 0.3s ease-out forwards;
 }
 
 @keyframes slide-up {
