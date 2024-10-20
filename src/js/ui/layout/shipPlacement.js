@@ -266,10 +266,10 @@ export default class ShipPlacement {
     if (!placedShips || !this.shipsArr) return;
 
     if (placedShips.size === this.shipsArr.length) {
-      show(this.playBtn);
+      this.playBtn.disabled = false;
       hide(this.draggableShips.container);
     } else {
-      hide(this.playBtn);
+      this.playBtn.disabled = true;
       show(this.draggableShips.container);
     }
   }

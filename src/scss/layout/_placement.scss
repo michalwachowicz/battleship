@@ -11,7 +11,7 @@
   }
 
   &-container {
-    gap: 2rem;
+    position: relative;
     padding: 0 6rem;
   }
 
@@ -25,9 +25,11 @@
   }
 
   &-ships {
+    position: absolute;
+    left: calc(50% + (min(80vh, 100%, 30rem) / 2) + 2rem);
     display: flex;
     flex-direction: column;
-    gap: calc(5vw - 6vh + 4px);
-    width: clamp(100px, 20vw, 250px);
+    gap: calc(5vw - 8vh + 0.5rem);
+    width: clamp(100px, 15vw, 250px);
   }
 }
