@@ -148,6 +148,9 @@ export default class ShipPlacement {
 
     if (!isDefinedNumber(x) || !isDefinedNumber(y)) {
       [x, y] = this.draggedShipElement.style.gridArea.split(" / ");
+
+      x -= 1;
+      y -= 1;
     }
 
     if (
